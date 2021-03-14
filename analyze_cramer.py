@@ -44,9 +44,16 @@ if __name__ == '__main__':
             if ticker not in cramer_picks:
                 cramer_picks[ticker] = date
 
-    # close_data = load_close_data(list(cramer_picks.keys()))
-    # pickle.dump(close_data,open('CramerData.pckl','wb'))
-    close_data = pickle.load(open('CramerData.pckl','rb'))
+
+
+     # COMMENT OUT THESE LINES AFTER THE FIRST RUN TO SAVE TIME
+    close_data = load_close_data(list(cramer_picks.keys()))
+    pickle.dump(close_data,open('CramerData.pckl','wb'))
+    # UNCOMMENT THIS LINES AFTER THE FIRST RUN
+    # close_data = pickle.load(open('CramerData.pckl','rb'))
+
+
+
     average_gain_to_date = 0
     average_gain_to_max = 0
     average_days_to_max = 0
@@ -102,12 +109,14 @@ if __name__ == '__main__':
     average_gain_to_max /= i
 
     print(i,len(uticks))
-    print('Average Profit to Date:',average_gain_to_date)
-    print('Average Max Profit:',average_gain_to_max)
+    print('Average Profit to Date:',100*average_gain_to_date)
+    print('Average Days Since Pick:', average_days_since_pick)
+    print('Average Annual Return Rate:',100*((1.+average_gain_to_date)**(1./(average_days_since_pick/(52*5.)))-1))
+    print('Average Max Profit:',100*average_gain_to_max)
     print('Average Days to Max Profit:',average_days_to_max)
-    print('Average Days Since Pick:',average_days_since_pick)
-    print('Worst Pick:',worst_pick,'with profit:',worst_profit)
-    print('Best Pick:',best_pick,'with profit:',best_profit)
+    print('Average Maximum Annual Return Rate:', 100*((1. + average_gain_to_max) ** (1. / (average_days_to_max / (52 * 5.)))-1))
+    print('Worst Pick:',worst_pick,'with profit:',100*worst_profit)
+    print('Best Pick:',best_pick,'with profit:',100*best_profit)
 
 
 
