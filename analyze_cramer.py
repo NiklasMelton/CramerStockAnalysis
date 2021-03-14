@@ -50,6 +50,7 @@ if __name__ == '__main__':
     average_gain_to_date = 0
     average_gain_to_max = 0
     average_days_to_max = 0
+    average_days_since_pick = 0
     i = 0
 
     worst_pick = None
@@ -67,13 +68,15 @@ if __name__ == '__main__':
                 fdate = format_date(date)
                 idx_buy = [fdate in str(d) for d in ticker_data['Date']].index(True)
                 buy_price = ticker_data['Close'][idx_buy]
-                max_idx = np.argmax(ticker_data['Close'][idx_buy:])
+                max_idx = np.argmax(ticker_data['Close'][idx_buy:]) + idx_buy
                 max_price = ticker_data['Close'][max_idx]
                 last_price = ticker_data['Close'][-1]
 
                 profit_to_date = (last_price-buy_price)/buy_price
                 max_profit = (max_price-buy_price)/buy_price
                 days_to_max = max_idx-idx_buy
+                days_since_pick = len(ticker_data['Date']) - idx_buy
+
 
                 if profit_to_date < worst_profit:
                     worst_profit = profit_to_date
@@ -83,6 +86,7 @@ if __name__ == '__main__':
                     best_pick = ticker
 
                 average_days_to_max += days_to_max
+                average_days_since_pick += days_since_pick
                 average_gain_to_date += profit_to_date
                 average_gain_to_max += max_profit
                 i += 1
@@ -93,6 +97,7 @@ if __name__ == '__main__':
 
 
     average_days_to_max /= i
+    average_days_since_pick /= i
     average_gain_to_date /= i
     average_gain_to_max /= i
 
@@ -100,6 +105,7 @@ if __name__ == '__main__':
     print('Average Profit to Date:',average_gain_to_date)
     print('Average Max Profit:',average_gain_to_max)
     print('Average Days to Max Profit:',average_days_to_max)
+    print('Average Days Since Pick:',average_days_since_pick)
     print('Worst Pick:',worst_pick,'with profit:',worst_profit)
     print('Best Pick:',best_pick,'with profit:',best_profit)
 
